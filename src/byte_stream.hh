@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
+#include <queue>
 
 class Reader;
 class Writer;
@@ -25,6 +26,18 @@ protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
   uint64_t capacity_;
   bool error_ {};
+
+  // 定义缓冲区
+  std::queue<std::string> buffer_data {};
+  std::string_view buffer_view {};
+
+  // 补充信息
+  uint64_t bytes_pushed_ {}; // 已写入的字节数
+  uint64_t bytes_popped_ {}; // 已弹出的字节数
+
+  // 添加状态位等 
+  // enum State { CLOSED, ERROR };
+  unsigned char flag_ {};  // 0:normal 1:closed // 2:error
 };
 
 class Writer : public ByteStream

@@ -26,5 +26,7 @@ public:
   const Writer& writer() const { return reassembler_.writer(); }
 
 private:
+  std::optional<Wrap32> isn_ {} ;
   Reassembler reassembler_;
+  bool flag_ {};
 };

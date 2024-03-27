@@ -9,9 +9,29 @@ using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
-  cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
-  cerr << "Warning: get_URL() has not been implemented yet.\n";
+  //实现wget的功能
+  //1.创建一个socket
+  //2.连接到host
+  //3.发送一个HTTP GET请求到path
+  //4.读取服务器的响应
+  //5.将响应写到标准输出
+  //6.关闭socket
+  TCPSocket socket;
+  socket.connect(Address(host, "http"));
+  string request = "GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n";
+  socket.write(request);
+  socket.shutdown( SHUT_WR );
+  string buf;
+  while (!socket.eof()) {
+    socket.read(buf); // 将字节流读进buf
+    cout << buf;
+  }
+  socket.close();
+
+  //cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
+  //cerr << "Warning: get_URL() has not been implemented yet.\n";
 }
+
 
 int main( int argc, char* argv[] )
 {

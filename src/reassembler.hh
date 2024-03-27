@@ -1,6 +1,8 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <list>
+#include <tuple>
 
 class Reassembler
 {
@@ -30,6 +32,12 @@ public:
    */
   void insert( uint64_t first_index, std::string data, bool is_last_substring );
 
+  void push_to_output( std::string data );
+
+  void buffer_push( uint64_t first_index, uint64_t end_index, std::string data );
+
+  void buffer_pop();
+
   // How many bytes are stored in the Reassembler itself?
   uint64_t bytes_pending() const;
 
@@ -41,5 +49,9 @@ public:
   const Writer& writer() const { return output_.writer(); }
 
 private:
-  ByteStream output_; // the Reassembler writes to this ByteStream
+  uint64_t next_index_ {};                                           // the index of the next byte to be written
+  std::list<std::tuple<uint64_t, uint64_t, std::string>> buffer_ {}; // (first_index, end_index, data)
+  ByteStream output_;                                                // the Reassembler writes to this ByteStream
+  bool flag_ {};                                                     // Whether it is the last string
+  uint64_t buffer_size_ {};
 };
